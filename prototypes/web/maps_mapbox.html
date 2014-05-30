@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>A simple map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+
+
+<div id='map' style="height: 400px; width: 100%"></div>
+<br style="clear:both"/>
+<div id="basicMap" style="height: 400px; width: 100%"></div>
+
+
+
+<script>
+
+
+var hives = [
+    ["Apiary S&V", 8.23447, 50.086494, "Hier stehen 2 Hives"],
+    ["Apiary Sonnenberg", 8.254268, 50.104194, "Hier ist ein Ableger"],
+    ["Apiary Test", 8.239794, 50.079859, "Hier ist was anderes"]
+    
+]
+
+
+var map = L.mapbox.map('map', 'kinkerl.ibflihof')
+    .setView([hives[0][2], hives[0][1]], 14);
+
+
+var circle_options = {
+    color: '#fff',      // Stroke color
+    opacity: 0.2,         // Stroke opacity
+    weight: 5,         // Stroke weight
+    fillColor: '#550',  // Fill color
+    fillOpacity: 0.0798595    // Fill opacity
+};
+
+
+for (var i = 0; i < hives.length; i++) {
+
+
+
+
+    var myLayer = L.mapbox.featureLayer().addTo(map);
+
+
+    var geoJson = [{
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [hives[i][1], hives[i][2]]
+        },
+        properties: {
+            //'marker-color': '#0fe',
+            //'marker-symbol': 'star-stroked',
+            "icon": {
+                "iconUrl": "marker2.png",
+                "iconSize": [27, 24], // size of the icon
+                "iconAnchor": [14, 12], // point of the icon which will correspond to marker's location
+                "popupAnchor": [0, -12], // point from which the popup should open relative to the iconAnchor
+                "className": "dot"
+            },
+            title: hives[i][0],
+            description: hives[i][3]
+        }
+    }]
+
+    // Set a custom icon on each marker based on feature properties.
+    myLayer.on('layeradd', function(e) {
+        var marker = e.layer,
+            feature = marker.feature;
+
+        marker.setIcon(L.icon(feature.properties.icon));
+    });
+
+    myLayer.setGeoJSON(geoJson);
+
+    L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
+
+
+
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>

@@ -10,4 +10,4 @@ Chapter 1
    :maxdepth: 2
 
    maps/research.rst
-   
+   videobeetracker.rst   

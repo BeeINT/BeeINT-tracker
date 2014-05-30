@@ -1,0 +1,86 @@
+<html><body>
+  <div id="mapdiv"></div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <link rel="stylesheet" href="map.css" type="text/css" media="screen">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
+Beehives
+  <div id="map" class="smallmap"></div>
+
+    <script>
+
+
+
+
+
+map = new OpenLayers.Map("map");
+map.addLayer(new OpenLayers.Layer.OSM());
+var epsg4326 = new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+var projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+
+
+
+var hives = [
+	["Hive 2", 8.23447, 50.086494],
+	["Hive 1", 8.254268, 50.104194]
+	
+]
+
+
+map.setCenter(new OpenLayers.LonLat(hives[0][1],hives[0][2]).transform(epsg4326, projectTo), 14);
+
+
+
+
+var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+var markers = new OpenLayers.Layer.Markers( "Markers" );
+
+for (var i = 0; i < hives.length; i++) {
+	var lonLat = new OpenLayers.LonLat(hives[i][1],hives[i][2]).transform(epsg4326, projectTo);
+
+	var point = new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat);
+
+	var mycircle = new OpenLayers.Geometry.Polygon.createRegularPolygon(point, 1000, 40, 0);
+	var featurecircle = new OpenLayers.Feature.Vector(mycircle, {}, {'fillOpacity':0.1, 'strokeOpacity':0.2});
+
+	var mycircle2 = new OpenLayers.Geometry.Polygon.createRegularPolygon(point, 2000, 40, 0);
+	var featurecircle2 = new OpenLayers.Feature.Vector(mycircle2, {}, {'fillOpacity':0.1, 'strokeOpacity':0.2});
+
+	vectorLayer.addFeatures([featurecircle, featurecircle2]);
+
+	/*var featurePoint = new OpenLayers.Feature.Vector(point,
+	   { description: 'info' , name: 'test'},
+	    { externalGraphic: 'marker.png', graphicHeight: 25, graphicWidth: 25, graphicXOffset: -12, graphicYOffset: -12 }
+	);
+*/  
+	var size = new OpenLayers.Size(32,32);
+	var offset = new OpenLayers.Pixel(-(size.w/2), -size.h/2);
+
+	var icon_marker = new OpenLayers.Icon('marker.png',
+	                                      size, 
+	                                       offset);
+	var marker = new OpenLayers.Marker(lonLat, icon_marker);
+
+	marker.popup = new OpenLayers.Popup("Popup-"+i, lonLat,
+	        null,
+	        '<div style="background-color: yellow;">Hello World! Put your html here-'+i+"-</div>",
+	        null,
+	        false);
+    map.addPopup(marker.popup);
+    marker.popup.hide() 
+
+    marker.events.register('mouseover', marker, function(evt) { evt.object.popup.show(); });
+	marker.events.register('mouseout', marker, function(evt) { evt.object.popup.hide(); });
+	
+	markers.addMarker(marker);
+	
+	
+
+}
+
+map.addLayer(vectorLayer);
+map.addLayer(markers);
+  </script>
+
+</body></html>
+
