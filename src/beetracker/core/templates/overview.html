@@ -1,0 +1,105 @@
+{% extends "root.html" %}
+
+
+{% block "head_block" %}
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+	<script src="/static/leaflet-providers.js"></script>
+{% endblock "head_block" %}
+    
+
+
+{% block "content" %}
+
+<div class="container">
+
+	<div class="page-header">
+	  <h1>Overview <small>Apiaries</small></h1>
+	</div>
+
+
+
+	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
+
+
+	<div class="list-group">
+	{% for hive in apiaries %}
+
+	  <a href="/detail/{{hive.id}}" class="list-group-item">
+	    <h4 class="list-group-item-heading">{{hive.name}}</h4>
+	    <p class="list-group-item-text">{{hive.description}}</p>
+	  </a>
+	{% endfor %}
+	</div>
+
+</div>
+
+<script>
+
+
+var hives = [
+{% for hive in apiaries %}
+    ["{{hive.name}}", {{hive.longitude}}, {{hive.latitude}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
+{% endfor %}    
+]
+
+
+var map = L.map('map', {
+			center: [hives[0][2], hives[0][1]],
+			zoom: 14,
+			zoomControl: false
+		});
+
+var defaultLayer = L.tileLayer.provider('MapBox.kinkerl.ibflihof').addTo(map);
+
+
+
+	var circle_options = {
+	    color: '#fff',      // Stroke color
+	    opacity: 0.2,         // Stroke opacity
+	    weight: 5,         // Stroke weight
+	    fillColor: '#550',  // Fill color
+	    fillOpacity: 0.0798595    // Fill opacity
+	};
+
+		var baseLayers = {
+			'Default: Mapbox': defaultLayer,
+			'OpenStreetMap': L.tileLayer.provider('OpenStreetMap.Mapnik'),
+			'Thunderforest Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
+			//'Esri WorldTopoMap': L.tileLayer.provider('Esri.WorldTopoMap'),
+			'Esri WorldImagery': L.tileLayer.provider('Esri.WorldImagery'),
+		};
+
+		var overlayLayers = {
+			'OpenWeatherMap Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
+			//'OpenWeatherMap CloudsClassic': L.tileLayer.provider('OpenWeatherMap.CloudsClassic'),
+			//'OpenWeatherMap Precipitation': L.tileLayer.provider('OpenWeatherMap.Precipitation'),
+			//'OpenWeatherMap PrecipitationClassic': L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic'),
+			'OpenWeatherMap Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
+			//'OpenWeatherMap RainClassic': L.tileLayer.provider('OpenWeatherMap.RainClassic'),
+			'OpenWeatherMap Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
+			'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
+			'OpenWeatherMap Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
+			'OpenWeatherMap Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
+			'OpenWeatherMap Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
+		};
+
+		var layerControl = L.control.layers(baseLayers, overlayLayers, {collapsed: false}).addTo(map);
+
+for (var i = 0; i < hives.length; i++) {
+
+	var marker = L.marker([hives[i][2], hives[i][1]]).addTo(map);
+	marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
+
+	var circle = L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
+
+  
+
+
+
+}
+
+</script>
+
+{% endblock "content" %}
