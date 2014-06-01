@@ -55,3 +55,4 @@ sonar-project.properties
 .directory
 src/beetracker/static
 src/beetracker/db.sqlite3
+.vagrant

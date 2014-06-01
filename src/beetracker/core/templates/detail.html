@@ -6,6 +6,12 @@
         <script src="/static/raphael.js"></script>
         <script src="/static/jquery.js"></script>
         <script src="/static/detail.js"></script>
+        
+        <script src="/static/g.raphael.js"></script>
+        <script src="/static/g.line.js"></script>
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="/static/leaflet-providers.js"></script>
 {% endblock "head_block" %}
     
 
@@ -18,7 +24,90 @@
 		  <h1>{{apiary}} <small>Apiary</small></h1>
 		</div>
 
-<h2>Mapinformations</h2>
+
+
+
+
+	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
+
+
+
+
+	<script>
+
+
+	var hives = [
+	{% for hive in apiaries %}
+	    ["{{hive.name}}", {{hive.longitude}}, {{hive.latitude}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
+	{% endfor %}    
+	]
+
+
+	var map = L.map('map', {
+				center: [{{apiary.latitude}}, {{apiary.longitude}}],
+				zoom: 14,
+				zoomControl: false
+			});
+
+	var defaultLayer = L.tileLayer.provider('MapBox.kinkerl.ibflihof').addTo(map);
+
+
+
+		var circle_options = {
+		    color: '#fff',      // Stroke color
+		    opacity: 0.2,         // Stroke opacity
+		    weight: 5,         // Stroke weight
+		    fillColor: '#550',  // Fill color
+		    fillOpacity: 0.0798595    // Fill opacity
+		};
+
+			var baseLayers = {
+				'Default: Mapbox': defaultLayer,
+				'OpenStreetMap': L.tileLayer.provider('OpenStreetMap.Mapnik'),
+				'Thunderforest Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
+				//'Esri WorldTopoMap': L.tileLayer.provider('Esri.WorldTopoMap'),
+				'Esri WorldImagery': L.tileLayer.provider('Esri.WorldImagery'),
+			};
+
+			var overlayLayers = {
+				'OpenWeatherMap Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
+				//'OpenWeatherMap CloudsClassic': L.tileLayer.provider('OpenWeatherMap.CloudsClassic'),
+				//'OpenWeatherMap Precipitation': L.tileLayer.provider('OpenWeatherMap.Precipitation'),
+				//'OpenWeatherMap PrecipitationClassic': L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic'),
+				'OpenWeatherMap Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
+				//'OpenWeatherMap RainClassic': L.tileLayer.provider('OpenWeatherMap.RainClassic'),
+				'OpenWeatherMap Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
+				'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
+				'OpenWeatherMap Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
+				'OpenWeatherMap Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
+				'OpenWeatherMap Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
+			};
+
+			var layerControl = L.control.layers(baseLayers, overlayLayers, {collapsed: false}).addTo(map);
+
+	for (var i = 0; i < hives.length; i++) {
+
+		var marker = L.marker([hives[i][2], hives[i][1]]).addTo(map);
+		marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
+
+		var circle = L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
+
+	  
+
+
+
+	}
+
+	</script>
+
+
+
+
+
+
+
+
+		<h2>Mapinformations</h2>
 		
 
 		{% for mapinfo in mapinfos%}
@@ -63,27 +152,59 @@
 
 
 
+		<div style="clear: both"></div>
+		<div>
+			<h2>Hives</h2>
+			{% for placement in apiary.placement.all %}
+				<h3>{{placement.hive.identifier}}</h3>
+			   <p>{{placement.hive.comment}}</p>
+			   	<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">Activity Indicatior</h3>
+				  </div>
+				  <div class="panel-body">
+					    <table id="data">
+		        		<tfoot>
+		            		<tr>
+				    		{% for activity in placement.hive.activityindication.all %}
+				    			<th><span class="chrt">{{activity.datetime}}</span></th>
+			    			{% endfor %}
+			    			</tr>
+		    			 </tfoot>
+		        		<tbody>
+		        			<tr>
+				    		{% for activity in placement.hive.activityindication.all %}
+				    			<th><span class="chrt">{{activity.index}}</span></th>
+			    			{% endfor %}
+			    			</tr>
+			            </tbody>
+		    		</table>
+		    		<div id="activity_holder"></div>
+					<br/>
+	 				
+				  </div>
+				</div>
+			    
 
-		<div style="clear: both"/>
-<div>
-		<h2>Hives</h2>
-		
-
-
-
-
-		{% for placement in apiary.placement.all %}
-	
-			<h3>{{placement.hive.identifier}}</h3>
-			    {{placement.hive.comment}}
-
-		{% endfor %}
+	    		<script>
+		        	var r = Raphael("activity_holder");
+		        	var values = [];
+		        	var labels = [];
+				    
+				    $("#data tbody tr th").each(function () {
+				        values.push(parseInt($(".chrt", this).text(), 10));
+				    });
+				    var count = 0;
+				    $("#data tfoot tr th").each(function () {
+				       labels.push( count);
+				       count += 1;
+				    });
+				    console.log(labels);
+					r.linechart(0, 0, 1100, 300, labels, [ values ], {smooth: true, colors: ['#2ca36a']});
+				</script>
+			{% endfor %}
+		</div>
 
 </div>
-
-
-
-
-</div>
-
+          
 {% endblock "content" %}

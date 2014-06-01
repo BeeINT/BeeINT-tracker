@@ -16,16 +16,19 @@ class Apiary(models.Model):
     longitude = models.DecimalField (max_digits=30, decimal_places=20)
     
     def __unicode__(self):
-    	return self.name
+        return self.name
 
 
 
 
 class HAPlacement(models.Model):
-	apiary = models.ForeignKey('Apiary', related_name="placement")
-	hive = models.ForeignKey('Hive', related_name="placement")
-	start_date = models.DateTimeField(blank=True, null=True)
-	end_date = models.DateTimeField(blank=True, null=True)
+    apiary = models.ForeignKey('Apiary', related_name="placement")
+    hive = models.ForeignKey('Hive', related_name="placement")
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+
+    def __unicode__(self):
+        return "{0} - {1}".format(self.apiary, self.hive)
 
 
 class Hive(models.Model):
@@ -37,15 +40,28 @@ class Hive(models.Model):
        
 
     def __unicode__(self):
-    	return self.identifier
+        return self.identifier
 
 
 
 class MapInformation(models.Model):
-	apiary = models.ForeignKey('Apiary')
-	date = models.DateTimeField(blank=True, null=True)
-	
-	tag_key = models.CharField(max_length=255)
-	tag_value = models.CharField(max_length=255)
-	api_response = models.TextField(blank=True, null=True)
-	
+    apiary = models.ForeignKey('Apiary')
+    date = models.DateTimeField(blank=True, null=True)
+    
+    tag_key = models.CharField(max_length=255)
+    tag_value = models.CharField(max_length=255)
+    api_response = models.TextField(blank=True, null=True)
+    
+    def __unicode__(self):
+        return "{0} - {1}/{2}".format(self.apiary, self.tag_key, self.tag_value)
+
+
+
+class ActivityIndication(models.Model):
+    hive = models.ForeignKey('Hive', related_name="activityindication")
+    datetime = models.DateTimeField(blank=True, null=True)
+    
+    index = models.IntegerField()
+    
+    def __unicode__(self):
+        return "{0} - {1}".format(self.hive, str(self.datetime))

@@ -74,6 +74,7 @@ def detail(request, aid):
     template = loader.get_template('detail.html')
     context = Context({
         'apiary': apiary,
+        'apiaries': Apiary.objects.all(),
         'mapinfos': mapinfos
         })
     return HttpResponse(template.render(context))

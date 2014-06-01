@@ -11,7 +11,7 @@ from decimal import Decimal
 
 # Register your models here.
 
-from core.models import Apiary, MapInformation, Hive, HAPlacement
+from core.models import Apiary, MapInformation, Hive, HAPlacement, ActivityIndication
 
 def get_mapinfos(modeladmin, request, queryset):
     lat_delta=Decimal(0.0502868487461)
@@ -72,3 +72,5 @@ admin.site.register(Apiary, ApiaryAdmin)
 admin.site.register(MapInformation)
 admin.site.register(Hive)
 admin.site.register(HAPlacement)
+
+admin.site.register(ActivityIndication)
