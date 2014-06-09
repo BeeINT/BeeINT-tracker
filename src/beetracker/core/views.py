@@ -1,80 +1,38 @@
-#from django.shortcuts import render
-from django.template import Context, loader
-from django.http import HttpResponse
+
 # Create your views here.
 
-from core.models import Apiary, MapInformation
+from core.models import Apiary
 
-import simplejson as json
+from core.osm import get_thing_by_tag, get_count_from_tag
+
+from django.shortcuts import render
 
 
 def home(request):
-
-    template = loader.get_template('home.html')
-    context = Context()
-    return HttpResponse(template.render(context))
+    return render(request, "home.html", {})
 
 
 
 def overview(request):
-
-    template = loader.get_template('overview.html')
-    context = Context({'apiaries': Apiary.objects.all()})
-    return HttpResponse(template.render(context))
+    return render(request, "overview.html", {'apiaries': Apiary.objects.all()})
 
 
 def detail(request, aid):
-
     apiary = Apiary.objects.get(id=aid)
-    mapinfos = MapInformation.objects.filter(apiary = apiary)
 
+    natural_tree_species = get_thing_by_tag(apiary = apiary, tag_key="natural", tag_value="tree", thing=["species:de", "species", "name:botanical"])
+    natural_tree_type = get_thing_by_tag(apiary = apiary, tag_key="natural", tag_value="tree", thing=["type"])
+    number_trees = get_count_from_tag(apiary = apiary, tag_key="natural", tag_value="tree")
+    leisure_parks = get_thing_by_tag(apiary=apiary, tag_key="leisure", tag_value="park")
+    landuse_vineyards = get_thing_by_tag(apiary=apiary, tag_key="landuse", tag_value="vineyard")
+   
 
-    for mapinfo in mapinfos:
-
-        response = json.loads(mapinfo.api_response)
-        findings = response["elements"]
-
-        if mapinfo.tag_key == "natural" and mapinfo.tag_value == "tree":
-            species = {}
-            leafs = {}
-
-            for tree in findings:
-                if "species" in tree["tags"]:
-                    if tree["tags"]["species"] in species:
-                        species[tree["tags"]["species"]] += 1
-                    else:
-                        species[tree["tags"]["species"]] = 1
-                elif "name:botanical" in tree["tags"]:
-                    if tree["tags"]["name:botanical"] in species:
-                        species[tree["tags"]["name:botanical"]] += 1
-                    else:
-                        species[tree["tags"]["name:botanical"]] = 1
-
-                if "type" in tree["tags"]:
-                    if tree["tags"]["type"] in leafs:
-                        leafs[tree["tags"]["type"]] += 1
-                    else:
-                        leafs[tree["tags"]["type"]] = 1
-            mapinfo.charts = [
-                {
-                    "name" : "Species",
-                    "id" : "pecies",
-                    "data": species
-                },
-                {
-                    "name" : "Leafs",
-                    "id" : "leafs",
-                    "data": leafs
-                },
-                ]
-
-
-
-
-    template = loader.get_template('detail.html')
-    context = Context({
+    return render(request, "detail.html", {
         'apiary': apiary,
         'apiaries': Apiary.objects.all(),
-        'mapinfos': mapinfos
+        'number_trees': number_trees,
+        'natural_tree_species': natural_tree_species, 
+        'natural_tree_type': natural_tree_type,
+        'leisure_park_chart': leisure_parks, 
+        'landuse_vineyard_chart':landuse_vineyards,
         })
-    return HttpResponse(template.render(context))

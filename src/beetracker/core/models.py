@@ -55,6 +55,8 @@ class MapInformation(models.Model):
     def __unicode__(self):
         return "{0} - {1}/{2}".format(self.apiary, self.tag_key, self.tag_value)
 
+    class Meta:
+        get_latest_by = "date"
 
 
 class ActivityIndication(models.Model):

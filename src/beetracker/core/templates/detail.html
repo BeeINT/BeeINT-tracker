@@ -1,5 +1,5 @@
 {% extends "root.html" %}
-
+{% load i18n l10n %} 
 
 {% block "head_block" %}
         <link rel="stylesheet" href="/static/detail.css"media="screen">
@@ -21,7 +21,7 @@
 <div class="container">
 
 		<div class="page-header">
-		  <h1>{{apiary}} <small>Apiary</small></h1>
+		  <h1>{{apiary}} <small>{% trans "Apiary" %}</small></h1>
 		</div>
 
 
@@ -29,22 +29,20 @@
 
 
 	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
-
-
-
+    
 
 	<script>
 
 
 	var hives = [
 	{% for hive in apiaries %}
-	    ["{{hive.name}}", {{hive.longitude}}, {{hive.latitude}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
+	    ["{{hive.name}}", {{hive.longitude|unlocalize }}, {{hive.latitude|unlocalize }}, "{{hive.description}} - <a href='/de/detail/{{hive.id}}'>details</a>"],
 	{% endfor %}    
 	]
 
 
 	var map = L.map('map', {
-				center: [{{apiary.latitude}}, {{apiary.longitude}}],
+				center: [{{apiary.latitude|unlocalize }}, {{apiary.longitude|unlocalize }}],
 				zoom: 14,
 				zoomControl: false
 			});
@@ -85,11 +83,31 @@
 
 			var layerControl = L.control.layers(baseLayers, overlayLayers, {collapsed: false}).addTo(map);
 
+
+
+var orangeMaker = L.icon({
+    iconUrl: '/static/marker-icon.png',
+    shadowUrl: '/static/marker-shadow.png',
+
+    iconSize:     [25,41], // size of the icon
+    shadowSize:   [41,41], // size of the shadow
+    iconAnchor:   [12,41], // point of the icon which will correspond to marker's location
+    popupAnchor:  [1,-34] // point from which the popup should open relative to the iconAnchor
+});
+
+
 	for (var i = 0; i < hives.length; i++) {
 
-		var marker = L.marker([hives[i][2], hives[i][1]]).addTo(map);
-		marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
+		if (hives[i][2] == {{apiary.latitude|unlocalize }} &&  hives[i][1]  == {{apiary.longitude|unlocalize }}) {
+			var marker = L.marker( [hives[i][2], hives[i][1]], {icon: orangeMaker}).addTo(map);
+			marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
 
+		}else{
+			var marker = L.marker( [hives[i][2], hives[i][1]]).addTo(map);
+			marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
+
+		}
+		
 		var circle = L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
 
 	  
@@ -103,52 +121,89 @@
 
 
 
-
-
-
-
-		<h2>Mapinformations</h2>
+		<h2>Pflanzenwelt</h2>
 		
 
-		{% for mapinfo in mapinfos%}
-			<h3>{{mapinfo.tag_key}} - {{mapinfo.tag_value}}</h3>
+			<h3>Bäume: {{number_trees}}</h3> 
 			<br/>
-			{% for chart in mapinfo.charts%}
-			<div class="chart" style="padding-right: 30px">	
-			
-				<h4>{{ chart.name }}</h4>
-			
-				<ul class="list-group" id="table_{{ chart.id }}">
-				  {% for pi,va in chart.data.items %}
-				  <li class="list-group-item">
-				    <span class="badge">{{va}}</span>
-				    <span class="text">{{pi}}</span>
-				  </li>
-				  {% endfor %}
-				</ul>
-
-
-				<div id="chart_{{ chart.id }}"></div>
-
-
+				{% if natural_tree_species %}
+				
+				<div class="chart" style="padding-right: 30px">	
+					<h4>Spezies</h4>
+					<ul class="list-group" id="table_species">
+					  {% for pi,va in natural_tree_species %}
+					  <li class="list-group-item">
+					    <span class="badge">{{va}}</span>
+					    <span class="text">{{pi}}</span>
+					  </li>
+					  {% endfor %}
+					</ul>
+					<div id="chart_species"></div>
+				</div>
 				<script>
 					$(function () {
 						var values = [],
 				        labels = [];
-					    $("#table_{{ chart.id }} li").each(function () {
+					    $("#table_species li").each(function () {
+					        values.push(parseInt($(".badge", this).text(), 10));
+					        labels.push($(".text", this).text());
+					    });
+					    
+			            Raphael("chart_species", 600, 600).pieChart(300, 300, 150, values, labels, "#ffffff");
+				      });
+				</script>
+
+				{% endif %}
+				{% if natural_tree_type %}
+				<div class="chart" style="padding-right: 30px">	
+					<h4>Blattart</h4>
+					<ul class="list-group" id="table_type">
+					  {% for pi,va in natural_tree_type %}
+					  <li class="list-group-item">
+					    <span class="badge">{{va}}</span>
+					    <span class="text">{%trans pi %}</span>
+					  </li>
+					  {% endfor %}
+					</ul>
+					<div id="chart_type"></div>
+				</div>
+					<script>
+
+					$(function () {
+						var values = [],
+				        labels = [];
+					    $("#table_type li").each(function () {
 					        values.push(parseInt($(".badge", this).text(), 10));
 					        labels.push($(".text", this).text());
 					    });
 
-			            Raphael("chart_{{ chart.id }}", 500, 500).pieChart(250, 250, 150, values, labels, "#ffffff");
+			            Raphael("chart_type", 600, 600).pieChart(300, 300, 150, values, labels, "#ffffff");
 				      });
 				</script>
-			</div>
-			{% endfor %}
+
+				{% endif %}
 			
-		{% endfor %}
+				
 
 
+			<div style="clear: both"></div>
+
+
+			{% if landuse_vineyard_chart %}
+				<h3>Weinanbaugebiete</h3>
+				{% for vineyard, amount in landuse_vineyard_chart %}
+						<span class="label label-success">{{vineyard}}</span>
+				{% endfor %}
+			{% endif %}
+
+
+			{% if leisure_park_chart %}
+				<h3>Grünflächen</h3>
+				<p>Parkanlagen in direkter Umgebung:</p>
+				{% for park, amount in leisure_park_chart %}
+						<span class="label label-success">{{park}}</span>
+				{% endfor %}
+			{% endif %}
 
 
 
@@ -199,9 +254,10 @@
 				       labels.push( count);
 				       count += 1;
 				    });
-				    console.log(labels);
-					r.linechart(0, 0, 1100, 300, labels, [ values ], {smooth: true, colors: ['#2ca36a']});
+				   r.linechart(0, 0, 1100, 300, labels, [ values ], {smooth: true, colors: ['#2ca36a']});
 				</script>
+			{% empty %}
+			<p> Sorry, no hives in this apiary </p>
 			{% endfor %}
 		</div>
 

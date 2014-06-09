@@ -1,4 +1,5 @@
 {% extends "root.html" %}
+{% load i18n l10n %} 
 
 
 {% block "head_block" %}
@@ -40,7 +41,7 @@
 
 var hives = [
 {% for hive in apiaries %}
-    ["{{hive.name}}", {{hive.longitude}}, {{hive.latitude}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
+    ["{{hive.name}}", {{hive.longitude|unlocalize}}, {{hive.latitude|unlocalize}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
 {% endfor %}    
 ]
 

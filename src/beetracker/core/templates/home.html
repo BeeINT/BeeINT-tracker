@@ -6,7 +6,11 @@
 	<div class="page-header">
 	  <h1>Bees <small>Welcome</small></h1>
 	</div>
-	Just go to the Overview
+	{% if user.is_authenticated %}
+	    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+	{% else %}
+	    <p>Welcome, new user. Please log in.</p>
+	{% endif %}
 </div>
 
 {% endblock "content" %}
