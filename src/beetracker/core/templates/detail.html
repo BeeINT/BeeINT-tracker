@@ -121,15 +121,15 @@ var orangeMaker = L.icon({
 
 
 
-		<h2>Pflanzenwelt</h2>
+		<h2>{% trans "plants" %}</h2>
 		
 
-			<h3>Bäume: {{number_trees}}</h3> 
+			<h3>{% trans "Trees" %}: {{number_trees}}</h3> 
 			<br/>
 				{% if natural_tree_species %}
 				
 				<div class="chart" style="padding-right: 30px">	
-					<h4>Spezies</h4>
+					<h4>{% trans "treespecies" %}</h4>
 					<ul class="list-group" id="table_species">
 					  {% for pi,va in natural_tree_species %}
 					  <li class="list-group-item">
@@ -156,7 +156,7 @@ var orangeMaker = L.icon({
 				{% endif %}
 				{% if natural_tree_type %}
 				<div class="chart" style="padding-right: 30px">	
-					<h4>Blattart</h4>
+					<h4>{% trans "treetype" %}</h4>
 					<ul class="list-group" id="table_type">
 					  {% for pi,va in natural_tree_type %}
 					  <li class="list-group-item">

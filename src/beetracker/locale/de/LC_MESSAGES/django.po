@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-09 20:01+0000\n"
-"PO-Revision-Date: 2014-06-09 20:04+0000\n"
+"POT-Creation-Date: 2014-06-10 07:51+0000\n"
+"PO-Revision-Date: 2014-06-10 07:52+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,21 @@ msgstr ""
 
 msgid "Apiary"
 msgstr "Apiary"
+
+msgid "plants"
+msgstr "Pflanzen"
+
+msgid "Trees"
+msgstr "Bäume"
+
+msgid "treespecies"
+msgstr "Spezies"
+
+msgid "treetype"
+msgstr "Baumtyp"
+
+msgid "Language"
+msgstr "Sprache"
 
 msgid "broad_leaved"
 msgstr "Blattbaum"
