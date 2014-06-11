@@ -1,15 +1,50 @@
 
 # Create your views here.
 
-from core.models import Apiary
+from core.models import Apiary, Hive
 
 from core.osm import get_thing_by_tag, get_count_from_tag
-
+from django.db.models import Count, Avg
 from django.shortcuts import render
+from django.http import HttpResponse
+import json
+from decimal import Decimal
+
+def heatmap(request):
+    heatmap = Apiary.objects.values('latitude_approx', 'longitude_approx').annotate(Count("id")).order_by("-id__count")
+    
+    ret = []
+    boxsize = Decimal(0.02)
+
+    for poly in heatmap:
+        heat = (float(poly["id__count"]) / float(heatmap[0]["id__count"]))
+
+        dic = {}
+        dic["type"] = "Feature"
+        dic["properties"] = {"heat": heat}
+        dic["geometry"] =  {
+            "type": "Polygon",
+            "coordinates": [[
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"])],
+                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"])],
+                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"]+boxsize)],
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)],
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)]
+            ]]
+        }
+        ret.append(dic)
+    return HttpResponse(json.dumps(ret), content_type="application/json")
 
 
 def home(request):
-    return render(request, "home.html", {})
+
+    return render(request, "home.html", {
+        'chart_apiaries' : len(Apiary.objects.all()),
+        'chart_hives' : len(Hive.objects.all()),
+        'avg_lat'  : Apiary.objects.all().aggregate(Avg('latitude_approx'))['latitude_approx__avg'],
+        'avg_long' : Apiary.objects.all().aggregate(Avg('longitude_approx'))['longitude_approx__avg'],
+    
+        })
 
 
 

@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-
+from decimal import Decimal, ROUND_DOWN
 
 
 
@@ -15,9 +15,17 @@ class Apiary(models.Model):
     latitude = models.DecimalField (max_digits=30, decimal_places=20)
     longitude = models.DecimalField (max_digits=30, decimal_places=20)
     
+    latitude_approx = models.DecimalField (max_digits=30, decimal_places=20, default=0)
+    longitude_approx = models.DecimalField (max_digits=30, decimal_places=20, default=0)
+    
+
     def __unicode__(self):
         return self.name
-
+    
+    def save(self, *args, **kwargs):
+        self.latitude_approx = (self.latitude / 2).quantize(Decimal('.01'), rounding=ROUND_DOWN) * 2
+        self.longitude_approx = (self.longitude /2).quantize(Decimal('.01'), rounding=ROUND_DOWN)*2
+        super(Apiary, self).save(*args, **kwargs)
 
 
 

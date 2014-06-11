@@ -49,7 +49,7 @@ var hives = [
 var map = L.map('map', {
 			center: [hives[0][2], hives[0][1]],
 			zoom: 14,
-			zoomControl: false
+			zoomControl: true
 		});
 
 var defaultLayer = L.tileLayer.provider('MapBox.kinkerl.ibflihof').addTo(map);
