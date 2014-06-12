@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from core.views import overview, detail, home, heatmap
+from core.views import overview, detail, home, dataviz, heatmap_geojson
 from core.api import ActivityIndicationResource
 from tastypie.api import Api
 from django.conf import settings
@@ -21,7 +21,9 @@ urlpatterns = patterns('',
 urlpatterns += i18n_patterns('',
     # Examples:
     url(r'^overview/', overview),
-    url(r'^json/heatmap/', heatmap),    
+    url(r'^heatmap/json/', heatmap_geojson),    
+    url(r'^dataviz/', dataviz),    
+        
 	url(r'^detail/(?P<aid>\d+)', detail),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),

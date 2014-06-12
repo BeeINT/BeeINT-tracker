@@ -70,10 +70,7 @@ def get_mapinfos(modeladmin, request, queryset):
             tag_key
             )
 
-          print box_latitude_top_left
-          print box_longitude_top_left
-          print box_latitude_bottom_right
-          print box_longitude_bottom_right
+
           data = urllib.urlencode( {'data': DATA_QUERY})
           req = urllib2.Request(API_URL, data)
           response = urllib2.urlopen(req).read()
@@ -84,6 +81,22 @@ def get_mapinfos(modeladmin, request, queryset):
           mapinfo.apiary = apiary
           mapinfo.date = datetime.now()
           mapinfo.save()
+
+
+
+
+        API_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}".format(apiary.latitude, apiary.longitude)
+
+        req = urllib2.Request(API_URL)
+        response = urllib2.urlopen(req).read()
+        mapinfo = MapInformation()
+        mapinfo.api_response = response
+        mapinfo.tag_key = "weather"
+        mapinfo.tag_value = "now"
+        mapinfo.apiary = apiary
+        mapinfo.date = datetime.now()
+        mapinfo.save()
+
 
 
 

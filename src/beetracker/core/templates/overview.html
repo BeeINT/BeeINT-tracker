@@ -16,7 +16,7 @@
 <div class="container">
 
 	<div class="page-header">
-	  <h1>Overview <small>Apiaries</small></h1>
+	  <h1>Overview <small>My Apiaries</small></h1>
 	</div>
 
 
@@ -48,7 +48,7 @@ var hives = [
 
 var map = L.map('map', {
 			center: [hives[0][2], hives[0][1]],
-			zoom: 14,
+			zoom: 13,
 			zoomControl: true
 		});
 
@@ -64,27 +64,27 @@ var defaultLayer = L.tileLayer.provider('MapBox.kinkerl.ibflihof').addTo(map);
 	    fillOpacity: 0.0798595    // Fill opacity
 	};
 
-		var baseLayers = {
-			'Default: Mapbox': defaultLayer,
-			'OpenStreetMap': L.tileLayer.provider('OpenStreetMap.Mapnik'),
-			'Thunderforest Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
-			//'Esri WorldTopoMap': L.tileLayer.provider('Esri.WorldTopoMap'),
-			'Esri WorldImagery': L.tileLayer.provider('Esri.WorldImagery'),
-		};
+			var baseLayers = {
+				'Default': defaultLayer,
+				'OpenStreetMap': L.tileLayer.provider('OpenStreetMap.Mapnik'),
+				'Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
+				//'Esri WorldTopoMap': L.tileLayer.provider('Esri.WorldTopoMap'),
+				'Satelite': L.tileLayer.provider('Esri.WorldImagery'),
+			};
 
-		var overlayLayers = {
-			'OpenWeatherMap Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
-			//'OpenWeatherMap CloudsClassic': L.tileLayer.provider('OpenWeatherMap.CloudsClassic'),
-			//'OpenWeatherMap Precipitation': L.tileLayer.provider('OpenWeatherMap.Precipitation'),
-			//'OpenWeatherMap PrecipitationClassic': L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic'),
-			'OpenWeatherMap Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
-			//'OpenWeatherMap RainClassic': L.tileLayer.provider('OpenWeatherMap.RainClassic'),
-			'OpenWeatherMap Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
-			'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
-			'OpenWeatherMap Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
-			'OpenWeatherMap Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
-			'OpenWeatherMap Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
-		};
+			var overlayLayers = {
+				'Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
+				//'OpenWeatherMap CloudsClassic': L.tileLayer.provider('OpenWeatherMap.CloudsClassic'),
+				//'OpenWeatherMap Precipitation': L.tileLayer.provider('OpenWeatherMap.Precipitation'),
+				//'OpenWeatherMap PrecipitationClassic': L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic'),
+				'Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
+				//'OpenWeatherMap RainClassic': L.tileLayer.provider('OpenWeatherMap.RainClassic'),
+				'Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
+				//'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
+				'Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
+				'Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
+				'Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
+			};
 
 		var layerControl = L.control.layers(baseLayers, overlayLayers, {collapsed: false}).addTo(map);
 

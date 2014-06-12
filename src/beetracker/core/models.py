@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 from decimal import Decimal, ROUND_DOWN
 
-
-
+from django.db.models import Q
+from  datetime import datetime
 class Apiary(models.Model):
     """
     Company model
@@ -26,6 +26,14 @@ class Apiary(models.Model):
         self.latitude_approx = (self.latitude / 2).quantize(Decimal('.01'), rounding=ROUND_DOWN) * 2
         self.longitude_approx = (self.longitude /2).quantize(Decimal('.01'), rounding=ROUND_DOWN)*2
         super(Apiary, self).save(*args, **kwargs)
+
+
+    def get_current_hives(self):
+        #self.placement.filter(start_date__lt=now, end_date__gt=now).hive.all()
+        return Hive.objects.filter(placement__apiary = self).filter(Q(placement__start_date__lt=datetime.now()) | Q(placement__start_date__isnull=True),
+                        Q(placement__end_date__lt=datetime.now()) | Q(placement__end_date__isnull=True))
+
+
 
 
 

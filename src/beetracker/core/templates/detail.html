@@ -26,8 +26,6 @@
 
 
 
-
-
 	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
     
 
@@ -43,7 +41,7 @@
 
 	var map = L.map('map', {
 				center: [{{apiary.latitude|unlocalize }}, {{apiary.longitude|unlocalize }}],
-				zoom: 14,
+				zoom: 13	,
 				zoomControl: true
 			});
 
@@ -60,25 +58,25 @@
 		};
 
 			var baseLayers = {
-				'Default: Mapbox': defaultLayer,
+				'Default': defaultLayer,
 				'OpenStreetMap': L.tileLayer.provider('OpenStreetMap.Mapnik'),
-				'Thunderforest Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
+				'Landscape': L.tileLayer.provider('Thunderforest.Landscape'),
 				//'Esri WorldTopoMap': L.tileLayer.provider('Esri.WorldTopoMap'),
-				'Esri WorldImagery': L.tileLayer.provider('Esri.WorldImagery'),
+				'Satelite': L.tileLayer.provider('Esri.WorldImagery'),
 			};
 
 			var overlayLayers = {
-				'OpenWeatherMap Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
+				'Clouds': L.tileLayer.provider('OpenWeatherMap.Clouds'),
 				//'OpenWeatherMap CloudsClassic': L.tileLayer.provider('OpenWeatherMap.CloudsClassic'),
 				//'OpenWeatherMap Precipitation': L.tileLayer.provider('OpenWeatherMap.Precipitation'),
 				//'OpenWeatherMap PrecipitationClassic': L.tileLayer.provider('OpenWeatherMap.PrecipitationClassic'),
-				'OpenWeatherMap Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
+				'Rain': L.tileLayer.provider('OpenWeatherMap.Rain'),
 				//'OpenWeatherMap RainClassic': L.tileLayer.provider('OpenWeatherMap.RainClassic'),
-				'OpenWeatherMap Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
-				'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
-				'OpenWeatherMap Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
-				'OpenWeatherMap Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
-				'OpenWeatherMap Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
+				'Pressure': L.tileLayer.provider('OpenWeatherMap.Pressure'),
+				//'OpenWeatherMap PressureContour': L.tileLayer.provider('OpenWeatherMap.PressureContour'),
+				'Wind': L.tileLayer.provider('OpenWeatherMap.Wind'),
+				'Temperature': L.tileLayer.provider('OpenWeatherMap.Temperature'),
+				'Snow': L.tileLayer.provider('OpenWeatherMap.Snow')
 			};
 
 			var layerControl = L.control.layers(baseLayers, overlayLayers, {collapsed: false}).addTo(map);
@@ -119,6 +117,25 @@ var orangeMaker = L.icon({
 	</script>
 
 
+		<h2>{% trans "weather" %}</h2>
+
+		<div class="chart" style="padding-right: 30px">	
+				
+			<ul class="list-group">
+					  <li class="list-group-item">
+					    <span class="badge">{{weather_temp}}°C</span>
+					    <span class="text">Letzte aktuelle Temperatur</span>
+					  </li>
+										  <li class="list-group-item">
+					    <span class="badge">{{weather_humidity}}%</span>
+					    <span class="text">Luftfeuchtigkeit</span>
+					  </li> 
+					</ul>
+				</div>
+
+
+
+			<div style="clear: both"></div>
 
 
 		<h2>{% trans "plants" %}</h2>
@@ -210,9 +227,9 @@ var orangeMaker = L.icon({
 		<div style="clear: both"></div>
 		<div>
 			<h2>Hives</h2>
-			{% for placement in apiary.placement.all %}
-				<h3>{{placement.hive.identifier}}</h3>
-			   <p>{{placement.hive.comment}}</p>
+			{% for hive in apiary.get_current_hives %}
+				<h3>{{hive.identifier}}</h3>
+			   <p>{{hive.comment}}</p>
 			   	<div class="panel panel-default">
 				  <div class="panel-heading">
 				    <h3 class="panel-title">Activity Indicatior</h3>
@@ -221,14 +238,14 @@ var orangeMaker = L.icon({
 					    <table id="data">
 		        		<tfoot>
 		            		<tr>
-				    		{% for activity in placement.hive.activityindication.all %}
+				    		{% for activity in hive.activityindication.all %}
 				    			<th><span class="chrt">{{activity.datetime}}</span></th>
 			    			{% endfor %}
 			    			</tr>
 		    			 </tfoot>
 		        		<tbody>
 		        			<tr>
-				    		{% for activity in placement.hive.activityindication.all %}
+				    		{% for activity in hive.activityindication.all %}
 				    			<th><span class="chrt">{{activity.index}}</span></th>
 			    			{% endfor %}
 			    			</tr>

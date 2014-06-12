@@ -1,0 +1,124 @@
+{% extends "root.html" %}
+{% load i18n l10n %} 
+
+{% block "head_block" %}
+        <link rel="stylesheet" href="/static/home.css"media="screen">
+        <script src="/static/jquery.js"></script>
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+	<script src="/static/leaflet-providers.js"></script>
+{% endblock "head_block" %}
+    
+
+{% block "content" %}
+
+<div class="container" style="height: 700px;">
+	<div class="page-header">
+	  <h1>Dataviz</h1>
+	</div>
+
+
+		<h2>{% trans "Statistics" %}</h2>
+    <ul class="list-group" id="table_type">
+      <li class="list-group-item">
+        <span class="badge">{{chart_apiaries}}</span>
+        <span class="text">Apiarys</span>
+      </li>
+      <li class="list-group-item">
+        <span class="badge">{{chart_hives}}</span>
+        <span class="text">Hives</span>
+      </li>
+      
+    </ul>
+
+
+
+
+		<h2>{% trans "heatmap" %}</h2>
+
+
+	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
+    
+
+
+
+
+<script>
+
+
+var map = L.map('map', {
+			center: [{{avg_lat|unlocalize}}, {{avg_long|unlocalize}}],
+			zoom: 12,
+			zoomControl: true
+		});
+
+var defaultLayer = L.tileLayer.provider('MapBox.kinkerl.ibflihof').addTo(map);
+
+
+//
+
+
+   function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+
+    function grade(percent){
+        r = (1 - percent) * 0 + percent * 255
+        g = (1 - percent) * 255 + percent * 0
+        b = (1 - percent) * 0 + percent * 0
+        return "#"+ hex(r) + hex(g) + hex(b)
+    }
+
+
+
+$.getJSON("/de/heatmap/json/", function( data ) {
+    L.geoJson(data, {
+        style: function(feature) {
+            return  {
+
+                fillColor: grade(feature.properties.heat),
+                fillOpacity: 0.3,
+                opacity:  0
+            };
+        }
+    }).addTo(map);
+});
+
+
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 0.5, 1],
+        labels = ["gering", "mittel", "hoch"];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    div.innerHTML += "<h4>Bienenkonzentration</h4>"
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML += 
+            '<i style="background:' + grade(grades[i]) + '"></i> ' + labels[i] + "<br/>";
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+</div>
+
+{% endblock "content" %}
