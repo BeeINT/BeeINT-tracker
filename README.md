@@ -5,11 +5,23 @@ beetracker
 Dependencies
 --------------
 
-sudo apt-get install python-opencv
+ * python 3
+ * vagrant
 
 
 
 Quickstart
 -------------
 
-python track.py --source "examples/beehive-1.mp4"
+vagrant up
+invoke server
+
+
+
+Documentation
+---------------
+
+Go inside the vagrant server using vagrant ssh
+
+invoke docs
+invoke docs_presentation
