@@ -1,7 +1,7 @@
-import fuzzy
-soundex = fuzzy.Soundex(20)
+from core.utils import soundex
 from core.models import MapInformation
 import simplejson as json
+import traceback, sys
 
 def get_thing_by_tag(apiary, tag_key, tag_value, thing=["name"], soundex = True):
     """
@@ -12,9 +12,11 @@ def get_thing_by_tag(apiary, tag_key, tag_value, thing=["name"], soundex = True)
         ret = _crunsh_generic(json.loads(map_obj.api_response)["elements"], thing)
         if soundex:
             ret = _magic_combine(ret)
-    except Exception:
-        ret = None
-    return sorted(ret.iteritems())
+    except Exception as e:
+        print(str(e) + "asd")
+        traceback.print_exc(file=sys.stdout)
+        return None
+    return sorted(ret.items())
     
   
 def get_count_from_tag(apiary, tag_key, tag_value):
@@ -56,7 +58,7 @@ def _magic_combine(elements):
         else:
             soundex_keys[snd_key] = [key]
     #remap
-    for key in sorted(snd_grp.iterkeys()):
+    for key in sorted(snd_grp.keys()):
         most = 0
         for key_orig in soundex_keys[key]:
             if elements[key_orig] > most:

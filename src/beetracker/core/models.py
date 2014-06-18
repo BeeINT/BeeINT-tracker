@@ -5,6 +5,10 @@ from decimal import Decimal, ROUND_DOWN
 
 from django.db.models import Q
 from  datetime import datetime
+from django.utils.encoding import python_2_unicode_compatible
+
+
+@python_2_unicode_compatible
 class Apiary(models.Model):
     """
     Company model
@@ -19,7 +23,7 @@ class Apiary(models.Model):
     longitude_approx = models.DecimalField (max_digits=30, decimal_places=20, default=0)
     
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):

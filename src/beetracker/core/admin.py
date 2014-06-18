@@ -5,7 +5,8 @@ import locale
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 #import simplejson as json
 import urllib
-import urllib2
+
+
 from datetime import datetime    
 from decimal import Decimal
 
@@ -71,9 +72,10 @@ def get_mapinfos(modeladmin, request, queryset):
             )
 
 
-          data = urllib.urlencode( {'data': DATA_QUERY})
-          req = urllib2.Request(API_URL, data)
-          response = urllib2.urlopen(req).read()
+          data = urllib.parse.urlencode( {'data': DATA_QUERY})
+          data = data.encode('UTF-8')
+          req = urllib.request.Request(API_URL, data)
+          response = urllib.request.urlopen(req).read()
           mapinfo = MapInformation()
           mapinfo.api_response = response
           mapinfo.tag_key = tag_name
@@ -87,8 +89,7 @@ def get_mapinfos(modeladmin, request, queryset):
 
         API_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}".format(apiary.latitude, apiary.longitude)
 
-        req = urllib2.Request(API_URL)
-        response = urllib2.urlopen(req).read()
+        response = urllib.request.urlopen(API_URL).read()
         mapinfo = MapInformation()
         mapinfo.api_response = response
         mapinfo.tag_key = "weather"
