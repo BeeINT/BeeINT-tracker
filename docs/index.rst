@@ -4,14 +4,23 @@ Documentation
 
 
 
-Userdoc
------------
+General Information
+--------------------
 
 .. toctree::
    :maxdepth: 2
 
-   userdoc.rst
+   general/overview.rst
+
+
+Presentations
+--------------------
+
+.. toctree::
+   :maxdepth: 1
+
    presentation/overview.rst
+
 
 Development
 -------------
@@ -19,10 +28,17 @@ Development
 .. toctree::
    :maxdepth: 2
 
-   maps/poi.rst   
-   maps/research.rst
-   videobeetracker.rst   
-   api.rst
-   development/quickstart.rst
-   development/tasks.rst
-   buildwith.rst
+   development/buildwith.rst
+   development/docs.rst
+   development/maps_poi.rst   
+   
+   
+
+
+Prototypes
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+   prototypes/videobeetracker.rst   

@@ -10,5 +10,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell, :path => "src/vagrant/install.sh"
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "2048"]
+        vb.customize ["modifyvm", :id, "--cpus", "2"]   
     end
 end

@@ -8,9 +8,10 @@ VIRTUALENV_DIR=/home/vagrant/.virtualenvs/$PROJECT_NAME
 
 
 apt-get update -y
+apt-get upgrade -y
 apt-get install -y build-essential python python-dev python-setuptools python-pyodbc libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-dev git vim gettext
 
-sudo apt-get install -y python3-dev libxml2-dev libxslt-dev
+apt-get install -y python3-dev libxml2-dev libxslt-dev
 
 gem install compass -v 0.13.alpha.4 --pre
 gem install compass-blueprint
@@ -37,4 +38,5 @@ echo "workon $VIRTUALENV_NAME" >> /home/vagrant/.bashrc
 
 
 # Django project setup
-#su - vagrant -c "source $VIRTUALENV_DIR/bin/activate && pip install -r requirements.txt"
+su - vagrant -c "source $VIRTUALENV_DIR/bin/activate && invoke docs"
+su - vagrant -c "source $VIRTUALENV_DIR/bin/activate && invoke docs_presentation"

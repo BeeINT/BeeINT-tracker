@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 )
 urlpatterns += i18n_patterns('',
     # Examples:
+  
     url(r'^overview/', overview),
     url(r'^heatmap/json/', heatmap_geojson),    
     url(r'^dataviz/', dataviz),    
@@ -31,6 +32,10 @@ urlpatterns += i18n_patterns('',
     
 )
 
+urlpatterns += patterns('',
+         url(r'^docs/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.DOC_ROOT, 'show_indexes': False}),
+     
+    )
 
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += patterns('',

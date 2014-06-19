@@ -117,3 +117,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "../bootstrap-3.1.1-dist"),
 )
+
+DOC_ROOT = os.path.join(BASE_DIR, '../../docs/_build/html/')
