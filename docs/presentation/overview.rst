@@ -1,42 +1,88 @@
 Mission Statement
 __________________
 
+
+:css: rtd.css
+
+
 This is a test presentation with Hovercraft.
 
 invoke docs_presentation
 
 ----
 
-This is a first slide
-=====================
 
-Restructured text takes any line that is underlines with punctuation and
-makes it into a heading. Each type of undeline will be made into a different
-level of heading, but it is not the type that is important, but rather the
-order of which each type will be enountered.
-
-So in this presentation, lines underlined with equal (=) characters will be
-made into a first-level (H1) heading.
+equilibeeum
+===================
 
 ----
 
-First header
-============
+Spannende Fragen die wir beantworten wollen
+===================
 
-You can choose other punctuation characters as your level 1 heading if you like,
-but this is the most common. Any if these character works::
+* Wo leben gesunde Bienen
+* Wie leben diese Bienen
+* Wo produzieren Bienen viel Honig
+* Wo ist noch Platz für Bienen
+* Wo gibt es Krankheiten
 
-    = - ` : ' " ~ ^ _ * + # < > .
+----
 
-Second header
--------------
+Idee
+=====================
 
-Third header
-............
+ * Was ist im Honig drin
+ * Leitfaden für Stadtimker
+ * Hive management / Inspektionen
 
-The drawback with reStructuredText is that you can't skip levels. You can't
-go directly from level 1 to level 3 without having a level 2 in between.
-If you do you get an error::
+----
 
-    Title level inconsistent
+Dinge die daraus entstehen
+===========================
+
+ * Hives die von Varoa sterben
+ * Wo leben gesunde Hives
+ * Hive Stammbaum
+ * Wo ist noch Platz für Hives (Heatmap)
+ * Wo kann was getan werden
+
+
+----
+
+Aggregation
+=============================================
+
+* Karteninformationen
+* Landnutzung der Umgebung: Stadt, Land, Wasser
+* Botatnische Informationen
+* Wetter
+* Imkerguidelines
+
+----
+
+
+Seasonoverview
+================
+
+* Inspektions
+* Ernte
+* Nectar / Pollen der Bäume am Apiary
+* Pflegehilfe auf KW basis
+
+
+
+
+.. image:: ../_static/seasonoverview.jpg
+    :width: 100%
+
+
+
+----
+
+Dinge die wir mit den Bäumen machen können
+=============================================
+
+* Nectarflow über die Saison
+* Pollenflow über die Saison
+
 
