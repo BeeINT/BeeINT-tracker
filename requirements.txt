@@ -7,3 +7,4 @@ django-rosetta==0.7.4
 South==0.8.4
 invoke==0.8.2
 hovercraft==1.1
+django-modeltranslation==0.7.3

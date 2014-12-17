@@ -20,7 +20,7 @@ Presentations
    :maxdepth: 1
 
    presentation/overview.rst
-
+   presentation/ia.rst
 
 Development
 -------------

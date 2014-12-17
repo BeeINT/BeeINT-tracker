@@ -116,18 +116,37 @@ var orangeMaker = L.icon({
 
 	</script>
 
+{% comment %} 
+<h2>{% trans "whattodo" %}</h2>
 
+
+{% for do in whattodo %}
+	
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">{{ do.headline}}:  {{ do.kw_start}}KW-{{ do.kw_end}}KW</h3>
+	  </div>
+	  <div class="panel-body">
+	    {{ do.copy}}		  
+	  </div>
+	</div>
+
+
+{% endfor %}
+
+
+{% endcomment %}
 		<h2>{% trans "weather" %}</h2>
 
 		<div class="chart" style="padding-right: 30px">	
 				
 			<ul class="list-group">
 					  <li class="list-group-item">
-					    <span class="badge">{{weather_temp}}°C</span>
+					    <span class="badge">{{weather_temp|floatformat}}°C</span>
 					    <span class="text">Letzte aktuelle Temperatur</span>
 					  </li>
 										  <li class="list-group-item">
-					    <span class="badge">{{weather_humidity}}%</span>
+					    <span class="badge">{{weather_humidity|floatformat}}%</span>
 					    <span class="text">Luftfeuchtigkeit</span>
 					  </li> 
 					</ul>

@@ -1,7 +1,7 @@
 
 # Create your views here.
 
-from core.models import Apiary, Hive
+from core.models import Apiary, Hive, WhatToDoSeason
 
 from core.osm import get_thing_by_tag, get_count_from_tag
 from core.owm import get_current_weather_temp, get_current_weather_humidity
@@ -56,6 +56,7 @@ def overview(request):
 
 def detail(request, aid):
     apiary = Apiary.objects.get(id=aid)
+    whattodo = WhatToDoSeason.objects.all()
 
     natural_tree_species = get_thing_by_tag(apiary = apiary, tag_key="natural", tag_value="tree", thing=["species:de", "species", "name:botanical"])
     natural_tree_type = get_thing_by_tag(apiary = apiary, tag_key="natural", tag_value="tree", thing=["type"])
@@ -76,5 +77,6 @@ def detail(request, aid):
         'leisure_park_chart': leisure_parks, 
         'landuse_vineyard_chart':landuse_vineyards,
         'weather_temp' : weather_temp,
-        'weather_humidity' : weather_humidity
+        'weather_humidity' : weather_humidity,
+        'whattodo' : whattodo
         })

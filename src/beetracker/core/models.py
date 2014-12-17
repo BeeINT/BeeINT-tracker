@@ -41,16 +41,21 @@ class Apiary(models.Model):
 
 
 
+
+
+@python_2_unicode_compatible
 class HAPlacement(models.Model):
     apiary = models.ForeignKey('Apiary', related_name="placement")
     hive = models.ForeignKey('Hive', related_name="placement")
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "{0} - {1}".format(self.apiary, self.hive)
 
 
+
+@python_2_unicode_compatible
 class Hive(models.Model):
     """
     Company model
@@ -59,11 +64,12 @@ class Hive(models.Model):
     comment = models.TextField(blank=True, null=True)
        
 
-    def __unicode__(self):
+    def __str__(self):
         return self.identifier
 
 
 
+@python_2_unicode_compatible
 class MapInformation(models.Model):
     apiary = models.ForeignKey('Apiary')
     date = models.DateTimeField(blank=True, null=True)
@@ -72,18 +78,32 @@ class MapInformation(models.Model):
     tag_value = models.CharField(max_length=255)
     api_response = models.TextField(blank=True, null=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return "{0} - {1}/{2}".format(self.apiary, self.tag_key, self.tag_value)
 
     class Meta:
         get_latest_by = "date"
 
 
+@python_2_unicode_compatible
 class ActivityIndication(models.Model):
     hive = models.ForeignKey('Hive', related_name="activityindication")
     datetime = models.DateTimeField(blank=True, null=True)
     
     index = models.IntegerField()
     
-    def __unicode__(self):
+    def __str__(self):
         return "{0} - {1}".format(self.hive, str(self.datetime))
+
+
+
+
+
+@python_2_unicode_compatible
+class WhatToDoSeason(models.Model):
+    kw_start = models.IntegerField()
+    kw_end = models.IntegerField()
+
+    headline = models.CharField(max_length=255)
+    copy = models.TextField(max_length=255)
+   

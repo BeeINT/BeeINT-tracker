@@ -46,7 +46,9 @@ def compile_translations():
 
 @task
 def docs_presentation():
-    run("hovercraft docs/presentation/overview.rst docs/_build/pres/", echo=True, pty=True)
+    run("hovercraft docs/presentation/overview.rst docs/_build/pres_over/", echo=True, pty=True)
+    run("hovercraft docs/presentation/ia.rst docs/_build/pres_ia/", echo=True, pty=True)
+
 
 @task
 def docs():

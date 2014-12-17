@@ -13,7 +13,7 @@ from decimal import Decimal
 from math import pi, cos
 # Register your models here.
 
-from core.models import Apiary, MapInformation, Hive, HAPlacement, ActivityIndication
+from core.models import Apiary, MapInformation, Hive, HAPlacement, ActivityIndication, WhatToDoSeason
 
 
 def move_geo(latitude, longitude, dx, dy):
@@ -111,3 +111,4 @@ admin.site.register(Hive)
 admin.site.register(HAPlacement)
 
 admin.site.register(ActivityIndication)
+admin.site.register(WhatToDoSeason)
