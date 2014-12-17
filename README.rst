@@ -1,21 +1,18 @@
-beetracker
-==========
+BeeINT - tracker 
+================
 
 
 Dependencies
 --------------
 
- * python 3
  * vagrant
-
 
 
 Quickstart
 -------------
 
-vagrant up (this takes 10+ minutes)
-vagrant ssh
-invoke server
+* vagrant up (this takes 10+ minutes)
 
-Visit: http://localhost:8111/
-Documentation: http://localhost:8111/docs/
+
+* Visit: http://localhost:8000/
+* Documentation: http://localhost:8000/docs/
