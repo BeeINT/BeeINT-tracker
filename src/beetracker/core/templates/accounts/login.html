@@ -1,0 +1,23 @@
+{% extends "root.html" %}
+{% load i18n l10n %} 
+
+
+
+{% block "content" %}
+
+<div class="container" style="height: 700px;">
+	<div class="page-header">
+	  <h1>Login <small></small></h1>
+	</div>
+	
+	<form id="login_form" method="post" action="." autocomplete="off">
+        {% csrf_token %}
+        <input autocomplete="off" type="text" name="username" value="" placeholder="{% trans 'input_placeholder_email' %}">
+        <input type="password" name="password" value="" placeholder="{% trans 'input_placeholder_password' %}">
+        <button form="login_form" class="black" type="submit" value="submit">
+            {% trans "login_action_login" %}
+        </button>
+    </form>
+</div>
+
+{% endblock "content" %}

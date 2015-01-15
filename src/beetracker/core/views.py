@@ -10,7 +10,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 from decimal import Decimal
-
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+from django.shortcuts import render_to_response
+from django.contrib.auth import authenticate, login, logout#, hashers
+from django.http import HttpResponseRedirect
+"""
+@login_required
 def heatmap_geojson(request):
     heatmap = Apiary.objects.values('latitude_approx', 'longitude_approx').annotate(Count("id")).order_by("-id__count")
     ret = []
@@ -35,7 +41,7 @@ def heatmap_geojson(request):
     return HttpResponse(json.dumps(ret), content_type="application/json")
 
 
-
+@login_required
 def dataviz(request):
     return render(request, "dataviz.html", {
         'chart_apiaries' : len(Apiary.objects.all()),
@@ -44,16 +50,18 @@ def dataviz(request):
         'avg_long' : Apiary.objects.all().aggregate(Avg('longitude_approx'))['longitude_approx__avg'],
     
         })
+"""
 
 def home(request):
     return render(request, "home.html", {})
 
 
-
+@login_required
 def overview(request):
     return render(request, "overview.html", {'apiaries': Apiary.objects.all()})
 
 
+@login_required
 def detail(request, aid):
     apiary = Apiary.objects.get(id=aid)
     whattodo = WhatToDoSeason.objects.all()
@@ -80,3 +88,34 @@ def detail(request, aid):
         'weather_humidity' : weather_humidity,
         'whattodo' : whattodo
         })
+
+
+def register(request):
+    return render(request, "accounts/register.html", {})
+
+
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return HttpResponseRedirect("/")
+
+def user_login(request):
+    context = RequestContext(request)
+    success = False
+    user = None
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user=user)
+                return HttpResponseRedirect("/")
+            else:
+                success = False 
+        else:
+            success = False    
+    return render_to_response('accounts/login.html', {
+        'success': success,
+        }, context)
