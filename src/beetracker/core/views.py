@@ -1,29 +1,29 @@
-#from core.models import Apiary, WhatToDoSeason
-#
-#from core.osm import get_thing_by_tag, get_count_from_tag
-#from core.owm import get_current_weather_temp, get_current_weather_humidity
-#
+from core.models import Apiary, WhatToDoSeason
+
+from core.osm import get_thing_by_tag, get_count_from_tag
+from core.owm import get_current_weather_temp, get_current_weather_humidity
+
 from django.shortcuts import render
-#from django.contrib.auth.decorators import login_required
-#from django.template import RequestContext
-#from django.shortcuts import render_to_response
-#from django.contrib.auth import authenticate, login, logout  # hashers
-#from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+from django.shortcuts import render_to_response
+from django.contrib.auth import authenticate, login, logout  # hashers
+from django.http import HttpResponseRedirect
 #
 
 
 def home(request):
     return render(request, "home.html", {})
 
-""""
+
 
 @login_required
-def apiaires_new(request):
+def apiaries_new(request):
     return render(request, "apiaries/new.html", {})
 
 
 @login_required
-def apiaires_list(request):
+def apiaries_list(request):
     return render(request, "apiaries/list.html", {'apiaries': Apiary.objects.all()})
 
 
@@ -54,8 +54,8 @@ def apiaries_detail(request, aid):
         })
 
 
-#def about(request):
-#    return render(request, "about.html", {})
+def about(request):
+    return render(request, "about.html", {})
 
 
 def register(request):
@@ -88,7 +88,7 @@ def user_login(request):
     return render_to_response('accounts/login.html', {
         'success': success,
         }, context)
-"""
+
 
 
 #@login_required

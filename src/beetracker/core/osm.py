@@ -12,16 +12,20 @@ def get_thing_by_tag(apiary, tag_key, tag_value, thing=["name"], soundex = True)
         ret = _crunsh_generic(json.loads(map_obj.api_response)["elements"], thing)
         if soundex:
             ret = _magic_combine(ret)
+        return sorted(ret.items())
     except Exception as e:
-        print(str(e) + "asd")
+        print(str(e))
         traceback.print_exc(file=sys.stdout)
         return None
-    return sorted(ret.items())
+
     
   
 def get_count_from_tag(apiary, tag_key, tag_value):
-    map_obj = MapInformation.objects.filter(apiary = apiary, tag_key=tag_key, tag_value=tag_value).latest()
-    return len(json.loads(map_obj.api_response)["elements"])
+    try:
+        map_obj = MapInformation.objects.filter(apiary = apiary, tag_key=tag_key, tag_value=tag_value).latest()
+        return len(json.loads(map_obj.api_response)["elements"])
+    except:
+        return None
 
 
 
