@@ -27,7 +27,7 @@
 	<div class="list-group">
 	{% for hive in apiaries %}
 
-	  <a href="/detail/{{hive.id}}" class="list-group-item">
+	  <a href="{% url "apiaries_detail" hive.id %}" class="list-group-item">
 	    <h4 class="list-group-item-heading">{{hive.name}}</h4>
 	    <p class="list-group-item-text">{{hive.description}}</p>
 	  </a>
