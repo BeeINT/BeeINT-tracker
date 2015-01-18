@@ -7,12 +7,22 @@ from django.db.models import Q
 from  datetime import datetime
 from django.utils.encoding import python_2_unicode_compatible
 
+from django.contrib.auth.models import User
+
+#
+# python_2_unicode_compatible
+#
+# https://docs.djangoproject.com/en/1.7/ref/utils/#django.utils.encoding.python_2_unicode_compatible#
+
+
 
 @python_2_unicode_compatible
 class Apiary(models.Model):
     """
     Company model
     """
+ 
+    owner = models.ForeignKey(User, related_name="apiaries")
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     

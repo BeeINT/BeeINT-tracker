@@ -9,12 +9,11 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout  # hashers
 from django.http import HttpResponseRedirect
-#
+from django.shortcuts import get_object_or_404
 
 
 def home(request):
     return render(request, "home.html", {})
-
 
 
 @login_required
@@ -24,13 +23,13 @@ def apiaries_new(request):
 
 @login_required
 def apiaries_list(request):
-    return render(request, "apiaries/list.html", {'apiaries': Apiary.objects.all()})
+    return render(request, "apiaries/list.html", {'apiaries': Apiary.objects.filter(owner=request.user)})
 
 
 @login_required
 def apiaries_detail(request, aid):
-    apiary = Apiary.objects.get(id=aid)
-    whattodo = WhatToDoSeason.objects.all()
+    apiary = get_object_or_404(Apiary, id=aid, owner=request.user)
+    #whattodo = WhatToDoSeason.objects.all()
 
     natural_tree_species = get_thing_by_tag(apiary=apiary, tag_key="natural", tag_value="tree", thing=["species:de", "species", "name:botanical"])
     natural_tree_type = get_thing_by_tag(apiary=apiary, tag_key="natural", tag_value="tree", thing=["type"])
@@ -42,7 +41,7 @@ def apiaries_detail(request, aid):
 
     return render(request, "apiaries/detail.html", {
         'apiary': apiary,
-        'apiaries': Apiary.objects.all(),
+        'apiaries': Apiary.objects.filter(owner=request.user),
         'number_trees': number_trees,
         'natural_tree_species': natural_tree_species,
         'natural_tree_type': natural_tree_type,
@@ -50,7 +49,7 @@ def apiaries_detail(request, aid):
         'landuse_vineyard_chart': landuse_vineyards,
         'weather_temp': weather_temp,
         'weather_humidity': weather_humidity,
-        'whattodo': whattodo
+        #'whattodo': whattodo
         })
 
 
