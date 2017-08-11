@@ -33,8 +33,9 @@ def get_mapinfos(modeladmin, request, queryset):
 
 
     for apiary in queryset:
-        box_latitude_top_left, box_longitude_top_left = move_geo(apiary.latitude, apiary.longitude, -1., -1.)
-        box_latitude_bottom_right, box_longitude_bottom_right = move_geo(apiary.latitude, apiary.longitude, 1., 1.)
+        boxsize_in_km = 1.5 # from the center
+        box_latitude_top_left, box_longitude_top_left = move_geo(apiary.latitude, apiary.longitude, -boxsize_in_km, -boxsize_in_km)
+        box_latitude_bottom_right, box_longitude_bottom_right = move_geo(apiary.latitude, apiary.longitude, boxsize_in_km, boxsize_in_km)
 
 
 
@@ -70,12 +71,17 @@ def get_mapinfos(modeladmin, request, queryset):
             tag_name,
             tag_key
             )
+          
 
-
+          
+       #   print(DATA_QUERY)
           data = urllib.parse.urlencode( {'data': DATA_QUERY})
           data = data.encode('UTF-8')
           req = urllib.request.Request(API_URL, data)
           response = urllib.request.urlopen(req).read()
+          
+          
+          
           mapinfo = MapInformation()
           mapinfo.api_response = response
           mapinfo.tag_key = tag_name
@@ -85,19 +91,22 @@ def get_mapinfos(modeladmin, request, queryset):
           mapinfo.save()
 
 
+#
 
+        try:
 
-        API_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}".format(apiary.latitude, apiary.longitude)
+            API_URL = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}&APPID={2}".format(apiary.latitude, apiary.longitude, "a657e60dbeef803983af3dffdb4b9559")
 
-        response = urllib.request.urlopen(API_URL).read()
-        mapinfo = MapInformation()
-        mapinfo.api_response = response
-        mapinfo.tag_key = "weather"
-        mapinfo.tag_value = "now"
-        mapinfo.apiary = apiary
-        mapinfo.date = datetime.now()
-        mapinfo.save()
-
+            response = urllib.request.urlopen(API_URL).read()
+            mapinfo = MapInformation()
+            mapinfo.api_response = response
+            mapinfo.tag_key = "weather"
+            mapinfo.tag_value = "now"
+            mapinfo.apiary = apiary
+            mapinfo.date = datetime.now()
+            mapinfo.save()
+        except:
+            pass
 
 
 

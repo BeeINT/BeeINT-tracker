@@ -93,7 +93,7 @@ class MapInformation(models.Model):
 
     class Meta:
         get_latest_by = "date"
-
+        
 
 @python_2_unicode_compatible
 class ActivityIndication(models.Model):

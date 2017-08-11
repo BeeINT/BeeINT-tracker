@@ -16,7 +16,7 @@
 <div class="container">
 
 	<div class="page-header">
-	  <h1>Overview <small>My Apiaries</small></h1>
+	  <h1>Overview <small>My Locations</small></h1>
 	</div>
 
 
@@ -41,7 +41,7 @@
 
 var hives = [
 {% for hive in apiaries %}
-    ["{{hive.name}}", {{hive.longitude|unlocalize}}, {{hive.latitude|unlocalize}}, "{{hive.description}} - <a href='/detail/{{hive.id}}'>details</a>"],
+    ["{{hive.name}}", {{hive.longitude|unlocalize}}, {{hive.latitude|unlocalize}}, "{{hive.description}} - <a href='{% url "apiaries_detail" hive.id %}'>details</a>"],
 {% endfor %}    
 ]
 
@@ -93,7 +93,7 @@ for (var i = 0; i < hives.length; i++) {
 	var marker = L.marker([hives[i][2], hives[i][1]]).addTo(map);
 	marker.bindPopup("<b>"+hives[i][0]+"</b><br>"+hives[i][3]);
 
-	var circle = L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
+	var circle = L.circle([hives[i][2], hives[i][1]], 3000, circle_options).addTo(map);
 
   
 

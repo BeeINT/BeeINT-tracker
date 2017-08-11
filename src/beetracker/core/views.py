@@ -1,4 +1,4 @@
-from core.models import Apiary, WhatToDoSeason
+from core.models import Apiary, WhatToDoSeason, Hive
 
 from core.osm import get_thing_by_tag, get_count_from_tag
 from core.owm import get_current_weather_temp, get_current_weather_humidity
@@ -8,9 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout  # hashers
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 
+from django.db.models import Avg, Count
+from decimal import *
+import json
 
 def home(request):
     return render(request, "home.html", {})
@@ -61,6 +64,7 @@ def register(request):
     return render(request, "accounts/register.html", {})
 
 
+@login_required
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
@@ -90,36 +94,37 @@ def user_login(request):
 
 
 
-#@login_required
-#def heatmap_geojson(request):
-#    heatmap = Apiary.objects.values('latitude_approx', 'longitude_approx').annotate(Count("id")).order_by("-id__count")
-#    ret = []
-#    boxsize = Decimal(0.02)
-#    for poly in heatmap:
-#        heat = (float(poly["id__count"]) / float(heatmap[0]["id__count"]))
-#
-#        dic = {}
-#        dic["type"] = "Feature"
-#        dic["properties"] = {"heat": heat}
-#        dic["geometry"] =  {
-#            "type": "Polygon",
-#            "coordinates": [[
-#                [float(poly["longitude_approx"]),  float(poly["latitude_approx"])],
-#                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"])],
-#                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"]+boxsize)],
-#                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)],
-#                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)]
-#            ]]
-#        }
-#        ret.append(dic)
-#    return HttpResponse(json.dumps(ret), content_type="application/json")
-#
-#
-#@login_required
-#def dataviz(request):
-#    return render(request, "dataviz.html", {
-#        'chart_apiaries' : len(Apiary.objects.all()),
-#        'chart_hives' : len(Hive.objects.all()),
-#        'avg_lat'  : Apiary.objects.all().aggregate(Avg('latitude_approx'))['latitude_approx__avg'],
-#        'avg_long' : Apiary.objects.all().aggregate(Avg('longitude_approx'))['longitude_approx__avg'],
-#        })
+@login_required
+def heatmap_geojson(request):
+    heatmap = Apiary.objects.values('latitude_approx', 'longitude_approx').annotate(Count("id")).order_by("-id__count")
+    print(heatmap)
+    ret = []
+    boxsize = Decimal(0.02)
+    for poly in heatmap:
+        heat = (float(poly["id__count"]) / float(heatmap[0]["id__count"]))
+        
+        dic = {}
+        dic["type"] = "Feature"
+        dic["properties"] = {"heat": heat}
+        dic["geometry"] =  {
+            "type": "Polygon",
+            "coordinates": [[
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"])],
+                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"])],
+                [float(poly["longitude_approx"]+boxsize),  float(poly["latitude_approx"]+boxsize)],
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)],
+                [float(poly["longitude_approx"]),  float(poly["latitude_approx"]+boxsize)]
+            ]]
+        }
+        ret.append(dic)
+    return HttpResponse(json.dumps(ret), content_type="application/json")
+
+
+@login_required
+def dataviz(request):
+    return render(request, "dataviz.html", {
+        'chart_apiaries' : len(Apiary.objects.all()),
+        'chart_hives' : len(Hive.objects.all()),
+        'avg_lat'  : Apiary.objects.all().aggregate(Avg('latitude_approx'))['latitude_approx__avg'],
+        'avg_long' : Apiary.objects.all().aggregate(Avg('longitude_approx'))['longitude_approx__avg'],
+        })

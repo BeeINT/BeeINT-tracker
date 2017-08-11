@@ -12,23 +12,17 @@
 
 {% block "content" %}
 
-<div class="container" style="height: 700px;">
-	<div class="page-header">
-	  <h1>BeeInt <small>Tracker</small></h1>
-	</div>
-	{% if user.is_authenticated %}
-	    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-	{% else %}
-	    <p>Welcome, new user. Please <a href="{% url "login" %}">log in </a> or <a href="{% url "register" %}">register here</a>.</p>
-	{% endif %}
-
-	<h2>WHY</h2>
-
-	<h2>WHAT </h2>
-
-	<h2>HOW </h2>
-
-
-</div>
+    <div class="container">
+    <br/><br/>
+        <div class="jumbotron">
+        <h1 class="display-3">BeeInt <small>Tracker</small></h1>
+        <p class="lead">This is a simple helper for beekeepers and city planners. We try to help you do your thing!</p>
+        <hr class="my-4">
+        <p>If you want to learn more about what we do and our goals, follow the link:.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="" role="button">Learn more</a>
+        </p>
+        </div>
+    </div>
 
 {% endblock "content" %}

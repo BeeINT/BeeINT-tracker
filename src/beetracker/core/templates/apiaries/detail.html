@@ -2,16 +2,28 @@
 {% load i18n l10n %} 
 
 {% block "head_block" %}
-        <link rel="stylesheet" href="/static/detail.css"media="screen">
         <script src="/static/raphael.js"></script>
         <script src="/static/jquery.js"></script>
         <script src="/static/detail.js"></script>
         
         <script src="/static/g.raphael.js"></script>
         <script src="/static/g.line.js"></script>
- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        
+        <!--link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script-->
+        
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+   crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+   integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+   crossorigin=""></script>
 	<script src="/static/leaflet-providers.js"></script>
+	
+	
+	
+	
 {% endblock "head_block" %}
     
 
@@ -20,21 +32,21 @@
 
 <div class="container">
 
-		<div class="page-header">
-		  <h1>{{apiary}} <small>{% trans "Apiary" %}</small></h1>
-		</div>
+                <br/><br/>
+                <h1>{{apiary}} <small>Standort, {{ apiary.get_current_hives | length }} Stöcke</small></h1>
 
-
+		
 
 	<div id='map' style="height: 600px; width: 100%; position: relative;"></div>
-    
+
+
 
 	<script>
 
 
 	var hives = [
 	{% for hive in apiaries %}
-	    ["{{hive.name}}", {{hive.longitude|unlocalize }}, {{hive.latitude|unlocalize }}, "{{hive.description}} - <a href='/de/detail/{{hive.id}}'>details</a>"],
+	    ["{{hive.name}}", {{hive.longitude|unlocalize }}, {{hive.latitude|unlocalize }}, "{{hive.description}} - <a href='{% url "apiaries_detail" hive.id %}'>details</a>"],
 	{% endfor %}    
 	]
 
@@ -106,7 +118,7 @@ var orangeMaker = L.icon({
 
 		}
 		
-		var circle = L.circle([hives[i][2], hives[i][1]], 1000, circle_options).addTo(map);
+		var circle = L.circle([hives[i][2], hives[i][1]], 3000, circle_options).addTo(map);
 
 	  
 
@@ -115,7 +127,19 @@ var orangeMaker = L.icon({
 	}
 
 	</script>
-
+	<br/><br/>
+        <h2>Bienenstöcke</h2>
+        <p>
+            <ul class="list-group">
+            {% for hive in apiary.get_current_hives %}
+                <li class="list-group-item">{{hive}}</li>
+            {% endfor %}
+            </ul>
+        </p>
+        <br/><br/>
+        
+        
+        
 {% comment %} 
 <h2>{% trans "whattodo" %}</h2>
 
@@ -136,41 +160,48 @@ var orangeMaker = L.icon({
 
 
 {% endcomment %}
-		<h2>{% trans "weather" %}</h2>
+		<h2>Wetter</h2>
+                 <ul class="list-group">
+                    <li class="list-group-item">Letzte aktuelle Temperatur <span class="badge badge-secondary">{{weather_temp|floatformat}}°C</span></li>
+                    <li class="list-group-item">Luftfeuchtigkeit <span class="badge badge-secondary">{{weather_humidity|floatformat}}%</span></li>
+                    
+                </ul>
+                    
 
-		<div class="chart" style="padding-right: 30px">	
-				
-			<ul class="list-group">
-					  <li class="list-group-item">
-					    <span class="badge">{{weather_temp|floatformat}}°C</span>
-					    <span class="text">Letzte aktuelle Temperatur</span>
-					  </li>
-										  <li class="list-group-item">
-					    <span class="badge">{{weather_humidity|floatformat}}%</span>
-					    <span class="text">Luftfeuchtigkeit</span>
-					  </li> 
-					</ul>
-				</div>
+    <br/><br/>
+		<h2>{% trans "Pflanzen" %}</h2>
+                    <p>Dies sind die aktuell kartografierten Pflanzen in ca 3km Umgebung um den Bienenstock.</p>
+                    <br/>
+			{% if landuse_vineyard_chart %}
+				<h3>Weinanbaugebiete</h3>
+				<p>
+				{% for vineyard, amount in landuse_vineyard_chart %}
+						<span class="badge badge-success">{{vineyard}}</span>
+				{% endfor %}
+				</p>
+			{% endif %}
 
-
-
-			<div style="clear: both"></div>
-
-
-		<h2>{% trans "plants" %}</h2>
-		
-
-			<h3>{% trans "Trees" %}: {{number_trees}}</h3> 
+<br/><br/>
+			{% if leisure_park_chart %}
+				<h3>Grünflächen</h3>
+				<p>Parkanlagen in direkter Umgebung:</p>
+				<p>
+				{% for park, amount in leisure_park_chart %}
+						<span class="badge badge-success">{{park}}</span>
+				{% endfor %}
+				</p>
+			{% endif %}
+			<br/><br/>
+			<h3>{% trans "Bäume" %}: {{number_trees}}</h3> 
 			<br/>
 				{% if natural_tree_species %}
-				
 				<div class="chart" style="padding-right: 30px">	
-					<h4>{% trans "treespecies" %}</h4>
+					<h4>{% trans "Spezies" %}</h4>
 					<ul class="list-group" id="table_species">
 					  {% for pi,va in natural_tree_species %}
 					  <li class="list-group-item">
-					    <span class="badge">{{va}}</span>
-					    <span class="text">{{pi}}</span>
+					   
+					    <span class="text">{{pi}} &nbsp;<span class="badge badge-success">{{va}}</span></span>
 					  </li>
 					  {% endfor %}
 					</ul>
@@ -191,6 +222,7 @@ var orangeMaker = L.icon({
 
 				{% endif %}
 				{% if natural_tree_type %}
+				types
 				<div class="chart" style="padding-right: 30px">	
 					<h4>{% trans "treetype" %}</h4>
 					<ul class="list-group" id="table_type">
@@ -225,21 +257,7 @@ var orangeMaker = L.icon({
 			<div style="clear: both"></div>
 
 
-			{% if landuse_vineyard_chart %}
-				<h3>Weinanbaugebiete</h3>
-				{% for vineyard, amount in landuse_vineyard_chart %}
-						<span class="label label-success">{{vineyard}}</span>
-				{% endfor %}
-			{% endif %}
 
-
-			{% if leisure_park_chart %}
-				<h3>Grünflächen</h3>
-				<p>Parkanlagen in direkter Umgebung:</p>
-				{% for park, amount in leisure_park_chart %}
-						<span class="label label-success">{{park}}</span>
-				{% endfor %}
-			{% endif %}
 
 
 
@@ -299,5 +317,5 @@ var orangeMaker = L.icon({
 		</div>
 {% endcomment %}
 </div>
-          
+          <br/><br/><br/><br/><br/>
 {% endblock "content" %}

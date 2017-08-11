@@ -2,46 +2,106 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-11 21:47+0000\n"
+"POT-Creation-Date: 2017-08-11 09:01+0000\n"
 "PO-Revision-Date: 2014-06-11 21:48+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
+#: core/templates/accounts/login.html:15
+msgid "input_placeholder_email"
+msgstr ""
+
+#: core/templates/accounts/login.html:16
+msgid "input_placeholder_password"
+msgstr ""
+
+#: core/templates/accounts/login.html:18
+msgid "login_action_login"
+msgstr ""
+
+#: core/templates/apiaries/detail.html:36
 msgid "Apiary"
 msgstr "Apiary"
 
+#: core/templates/apiaries/detail.html:151
 msgid "weather"
 msgstr "Wetter"
 
+#: core/templates/apiaries/detail.html:172
 msgid "plants"
 msgstr "Pflanzen"
 
+#: core/templates/apiaries/detail.html:189
 msgid "Trees"
 msgstr "Bäume"
 
+#: core/templates/apiaries/detail.html:193
 msgid "treespecies"
 msgstr "Spezies"
 
+#: core/templates/apiaries/detail.html:229
 msgid "treetype"
 msgstr "Baumtyp"
 
-msgid "Language"
-msgstr "Sprache"
+#: core/templates/dataviz.html:32
+msgid "Statistics"
+msgstr ""
 
+#: core/templates/dataviz.html:48
+msgid "heatmap"
+msgstr ""
+
+#: core/templates/root.html:49
+msgid "NAVI_ABOUT"
+msgstr ""
+
+#: core/templates/root.html:51
+msgid "MY_APIARIES"
+msgstr ""
+
+#: core/templates/root.html:53
+msgid "DATA_VIZ"
+msgstr ""
+
+#: core/templates/root.html:59
+msgid "NAVI_USER"
+msgstr ""
+
+#: core/templates/root.html:62
+msgid "NAVI_APIARIES_NEW"
+msgstr ""
+
+#: core/templates/root.html:63
+msgid "NAVI_LOGOUT"
+msgstr ""
+
+#: core/templates/root.html:67
+msgid "NAVI_LOGIN"
+msgstr ""
+
+#: core/templates/root.html:71
+msgid "NAVI_LANGUAGE"
+msgstr ""
+
+#: core/templates/utilities/translation.html:5
 msgid "broad_leaved"
 msgstr "Blattbaum"
 
+#: core/templates/utilities/translation.html:6
 msgid "deciduous"
 msgstr "Laubbaum"
+
+#~ msgid "Language"
+#~ msgstr "Sprache"

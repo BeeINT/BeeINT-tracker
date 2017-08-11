@@ -293,7 +293,7 @@
 			}
 		},
 		OpenWeatherMap: {
-			url: 'http://{s}.tile.openweathermap.org/map/{variant}/{z}/{x}/{y}.png',
+			url: 'http://{s}.tile.openweathermap.org/map/{variant}/{z}/{x}/{y}.png?appid=a657e60dbeef803983af3dffdb4b9559',
 			options: {
 				attribution: 'Map data &copy; <a href="http://openweathermap.org">OpenWeatherMap</a>',
 				opacity: 0.5
